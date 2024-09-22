@@ -10,8 +10,8 @@
     <url>http://maven.apache.org</url>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source> <!-- Specify source compatibility -->
-        <maven.compiler.target>1.8</maven.compiler.target> <!-- Specify target compatibility -->
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <sonar.projectKey>demo-app</sonar.projectKey>
         <sonar.java.source>1.8</sonar.java.source>
     </properties>
@@ -20,14 +20,13 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
+            <version>4.13.2</version> <!-- Updated to a more recent version -->
             <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- JaCoCo plugin for code coverage -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -48,7 +47,6 @@
                 </executions>
             </plugin>
 
-            <!-- SonarQube plugin for static code analysis -->
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
