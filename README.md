@@ -7,7 +7,7 @@ Devops-Java-app/ │ ├── demo-app/ # Maven-based Java application director
 
 -----------Complexity report---------
 ``
-![Complexity-report](https://github.com/user-attachments/assets/bac8f131-e391-48ab-8909-88332ab4ded8)
+![Complexity-report](https://github.com/user-attachments/assets/1ce2bc73-d437-4915-86c9-1f2faa4fd212)
 ``
 
 ----------Sonar dashboard------------
