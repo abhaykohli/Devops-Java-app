@@ -1,0 +1,70 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven 3.8.1' // Ensure Maven is installed in Jenkins
+    }
+
+    environment {
+        SONARQUBE_SCANNER = tool 'sonar'
+        SONAR_TOKEN = credentials('jenkin') // Ensure 'jenkin' is the correct credential ID for your SonarQube token
+        NVD_API_KEY = credentials('nvd-api-key') // Add the NVD API key as a credential in Jenkins
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/abhaykohli/Devops-Java-app.git' // Replace with your repository URL
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('demo-app') { // Navigate into the demo-app directory
+                    sh 'mvn clean package'
+                }
+            }
+        }
+
+        stage('Code Quality - SonarQube') {
+            steps {
+                dir('demo-app') { // Ensure the correct directory is used for SonarQube analysis
+                    withSonarQubeEnv('sonar') {
+                        sh 'mvn sonar:sonar -Dsonar.login=$SONAR_TOKEN'
+                    }
+                }
+            }
+        }
+
+        stage('Cyclomatic Complexity - Lizard') {
+            steps {
+                dir('demo-app') {
+                    // Create a virtual environment and install Lizard
+                    sh '''
+                        python3 -m venv venv
+                        . venv/bin/activate
+                        pip install lizard
+                        lizard src/main/java > complexity-report.txt
+                    '''
+                }
+            }
+        }
+
+        stage('Security Scan - OWASP Dependency Check') {
+            steps {
+                dir('demo-app') {
+                    // Add the NVD API key to the dependency check command
+                    dependencyCheck additionalArguments: '--format HTML', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            dir('demo-app') {
+                archiveArtifacts artifacts: 'complexity-report.txt'
+            }
+        }
+    }
+}
